@@ -88,7 +88,7 @@
                file="${basedir}/src/MD5Checker.mxml">
             <jvmarg line="-Xms64m -Xmx384m -ea -Dapple.awt.UIElement=true"/>
             <load-config filename="${FLEX_HOME}/frameworks/air-config.xml"/>
-            <source-path path-element="${basedir}/../ant_on_air/src" />
+            <source-path path-element="${basedir}/../flex-installer/ant_on_air/src" />
         </mxmlc>
     </target>
     
@@ -135,6 +135,7 @@
     </target>
     
     <target name="commit" depends="credentials">
+        <delete file="${basedir}/getresult.txt" failonerror="false"/>
         <exec executable="${svn}" dir="${site}" failonerror="true" >
             <arg value="commit" />
             <arg value="--username" />
@@ -145,9 +146,8 @@
             <arg value="&quot;update md5s&quot;" />
         </exec>
         <!-- pause to give buildbot chance to react -->
-        <sleep seconds="5" />
+        <sleep seconds="60" />
         <get src="https://cms.apache.org/flex/publish" username="${apache.username}" password="${apache.password}" dest="${basedir}/getresult.txt" />
-        <delete file="${basedir}/getresult.txt" />
     </target>
     
     <target name="credentials" depends="get-username,get-password">
